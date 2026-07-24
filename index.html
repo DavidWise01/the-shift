@@ -1,0 +1,189 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="author" content="David Lee Wise / ROOT0 / TriPod LLC">
+<title>THE SHIFT · OCCUPATIONAL · UD0</title>
+<style>
+*{box-sizing:border-box}
+:root{--fire:#ff7a3c;--fire2:#d85f26;--amber:#e0952a;--amber2:#b0741c;--steel:#3a6079;--steel2:#2b4657;
+  --ink:#2a2620;--dim:#6f675c;--grn:#2e8b57;--panel:rgba(255,253,249,.76);--edge:rgba(216,95,38,.24);--edge2:rgba(216,95,38,.12)}
+html,body{margin:0;height:100%}
+body{background:#f4efe6;color:var(--ink);font:15px/1.55 'Segoe UI',system-ui,-apple-system,Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+#bg{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;display:block}
+.desk{position:relative;z-index:2;max-width:900px;margin:0 auto;padding:24px 16px 56px}
+.dtag{font:600 11px/1 ui-monospace,'Cascadia Code','Segoe UI Mono',monospace;letter-spacing:.32em;text-transform:uppercase;color:var(--fire2)}
+.dtag b{color:var(--fire)}
+h1{margin:.35em 0 .1em;font-size:clamp(26px,4.6vw,42px);font-weight:800;letter-spacing:.01em;color:#241f18}
+.sub{color:var(--dim);max-width:66ch;margin:.2em 0 0}
+.drag{display:inline-block;margin-left:10px;font:700 10px/1 ui-monospace,monospace;letter-spacing:.14em;color:var(--amber2);border:1px solid var(--amber);border-radius:999px;padding:4px 9px;vertical-align:middle;white-space:nowrap}
+.tier{display:inline-flex;gap:6px;align-items:center;margin-top:14px;font:600 11px/1 ui-monospace,monospace;letter-spacing:.14em}
+.chip{padding:5px 10px;border-radius:999px;border:1px solid var(--edge);background:var(--panel)}
+.chip.lit{color:var(--grn);border-color:rgba(46,139,87,.4)}
+.chip.amb{color:var(--amber2);border-color:rgba(176,116,28,.5)}
+.card{margin-top:20px;background:var(--panel);border:1px solid var(--edge);border-radius:16px;backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);box-shadow:0 14px 44px rgba(140,70,20,.13)}
+.stagewrap{padding:14px}
+#stage{width:100%;height:auto;display:block;border-radius:10px;background:rgba(255,252,246,.7);border:1px solid var(--edge2);touch-action:none;cursor:grab}
+#stage:active{cursor:grabbing}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:0 14px 14px}
+.btn{cursor:pointer;border:1px solid var(--edge);background:#fffdf8;color:var(--ink);padding:9px 14px;border-radius:10px;font:600 13px/1 'Segoe UI',system-ui;letter-spacing:.02em;transition:.15s}
+.btn:hover{border-color:var(--fire);box-shadow:0 0 14px rgba(255,122,60,.24)}
+.btn.on{background:linear-gradient(180deg,#ff8a4a,#ec6a2a);border-color:#ec6a2a;color:#fff}
+.rng{display:flex;align-items:center;gap:8px;font:600 12px ui-monospace,monospace;color:var(--dim);background:#fffdf8;border:1px solid var(--edge);border-radius:10px;padding:6px 12px}
+.rng b{color:var(--fire2);min-width:2.4em;text-align:right;display:inline-block}
+input[type=range]{accent-color:var(--fire);width:110px}
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--edge2);border-top:1px solid var(--edge);border-radius:0 0 16px 16px;overflow:hidden}
+.ro{background:var(--panel);padding:11px 14px}
+.ro .k{font:600 10px ui-monospace,monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.ro .v{font:700 19px ui-monospace,monospace;margin-top:3px;color:var(--ink)}
+.ro .v.g{color:var(--grn)} .ro .v.r{color:var(--fire2)} .ro .v.a{color:var(--amber2)} .ro .v.c{color:var(--steel)}
+.honesty{margin-top:22px;display:grid;gap:10px}
+.hz{background:var(--panel);border:1px solid var(--edge);border-left-width:3px;border-radius:10px;padding:12px 15px}
+.hz.lit{border-left-color:var(--grn)} .hz.amb{border-left-color:var(--amber)}
+.hz h4{margin:0 0 4px;font:700 11px ui-monospace,monospace;letter-spacing:.16em}
+.hz.lit h4{color:var(--grn)} .hz.amb h4{color:var(--amber2)}
+.hz p{margin:0;color:#3c362d;font-size:13.5px}
+.law{margin-top:16px;text-align:center;color:var(--dim);font:italic 500 13px/1.5 Georgia,serif}
+.sig{margin-top:26px;text-align:center;color:var(--dim);font:600 11px ui-monospace,monospace;letter-spacing:.14em}
+.sig b{color:var(--ink)}
+#fail{display:none;position:fixed;left:12px;right:12px;bottom:12px;z-index:99;background:#2a1408;border:1px solid var(--fire);color:#ffe0cf;padding:12px;border-radius:8px;font:12px ui-monospace,monospace;white-space:pre-wrap}
+</style></head><body>
+<canvas id="bg"></canvas>
+<div class="desk">
+  <div class="dtag">⚒ <b>OCCUPATIONAL</b> · the working machine · the live fire of the agents</div>
+  <h1>THE SHIFT <span class="drag">✋ DRAG · SLIDE · TAP</span></h1>
+  <p class="sub">Demand for the counter rises and falls across the day; your crew's shifts are blunt eight-hour blocks. <b>Drag</b> each shift along the clock, <b>slide</b> its length, <b>switch</b> the demand pattern — and try to cover the peaks without paying a crowd to stand idle at 4am.</p>
+  <div class="tier"><span class="chip lit">◆ LIT</span><span class="chip amb">▲ AMBER</span></div>
+  <div class="card">
+    <div class="stagewrap"><canvas id="stage" width="900" height="440"></canvas></div>
+    <div class="controls"><button class="btn" id="add">＋ hire</button><button class="btn" id="fire">－ lay off</button><button class="btn" id="pat">↻ demand pattern</button><label class="rng">shift length <input type="range" id="len" min="4" max="12" value="8" step="1"><b id="lenv">8</b>h</label></div>
+    <div class="readout"><div class="ro"><div class="k">crew</div><div class="v" id="roCrew">—</div></div><div class="ro"><div class="k">hours covered</div><div class="v" id="roCov">—</div></div><div class="ro"><div class="k">understaffed</div><div class="v" id="roUnder">—</div></div><div class="ro"><div class="k">idle (paid, unused)</div><div class="v" id="roWaste">—</div></div><div class="ro"><div class="k">the schedule</div><div class="v" id="roState">—</div></div></div>
+  </div>
+  <div class="honesty">
+    <div class="hz lit"><h4>◆ LIT — verified / checkable</h4><p>Demand is a required-staff level for each of the 24 hours; each worker covers a contiguous shift block you drag along the clock. Coverage(h) = how many shifts include hour h. The instrument sums the <b>understaffed</b> hours (demand > coverage) and the <b>idle</b> paid hours (coverage > demand) exactly, and reports the service level (fraction of hours fully covered) and the labour cost in worker-hours. Real workforce-scheduling arithmetic — the gap between blunt shifts and a smooth demand curve.</p></div>
+    <div class="hz amb"><h4>▲ AMBER — the figure</h4><p>A single day, integer demand, and no breaks, skills, or legal rest rules stand in for real rostering (an NP-hard optimisation in practice). The accounting shown — covered, understaffed, and idle-paid hours — is computed exactly for the schedule you build.</p></div>
+  </div>
+  <div class="law">OCCUPATIONAL: the fire is lit and the anvil is warm — but the work does not do itself.</div>
+  <div class="sig">David Lee Wise / ROOT0 / TriPod LLC &nbsp;·&nbsp; with <b>AVAN</b></div>
+</div>
+<div id="fail"></div>
+<script>
+window.onerror=function(m,s,l,c,e){var f=document.getElementById('fail');if(f){f.style.display='block';f.textContent='⚠ '+m+' @'+l+':'+c;}};
+</script>
+<script>
+(function(){
+  var cv=document.getElementById('bg'); if(!cv) return;
+  function fallback(){var c=cv.getContext&&cv.getContext('2d');if(!c)return;
+    function f(){var w=cv.width=innerWidth,h=cv.height=innerHeight;var g=c.createRadialGradient(w*.5,h*.42,0,w*.5,h*.42,Math.max(w,h)*.9);g.addColorStop(0,'#f7f2ea');g.addColorStop(1,'#ece4d6');c.fillStyle=g;c.fillRect(0,0,w,h);}f();addEventListener('resize',f);}
+  var gl;try{gl=cv.getContext('webgl',{antialias:true,alpha:false})||cv.getContext('experimental-webgl');}catch(e){}
+  if(!gl){fallback();return;}
+  function gear(teeth,ro,ri,rh){var pts=[],step=Math.PI*2/teeth;
+    for(var t=0;t<teeth;t++){var a=t*step;
+      pts.push([Math.cos(a)*ri,Math.sin(a)*ri]);
+      pts.push([Math.cos(a+step*0.16)*ro,Math.sin(a+step*0.16)*ro]);
+      pts.push([Math.cos(a+step*0.34)*ro,Math.sin(a+step*0.34)*ro]);
+      pts.push([Math.cos(a+step*0.5)*ri,Math.sin(a+step*0.5)*ri]);}
+    var seg=[];for(var i=0;i<pts.length;i++){var b=pts[(i+1)%pts.length];seg.push(pts[i][0],pts[i][1],b[0],b[1]);}
+    for(var i=0;i<28;i++){var a=i/28*6.283,b=(i+1)/28*6.283;seg.push(Math.cos(a)*rh,Math.sin(a)*rh,Math.cos(b)*rh,Math.sin(b)*rh);}
+    for(var k=0;k<5;k++){var a=k/5*6.283;seg.push(Math.cos(a)*rh,Math.sin(a)*rh,Math.cos(a)*ri,Math.sin(a)*ri);}
+    return seg;}
+  var gA=gear(14,1.0,0.74,0.28), gB=gear(10,0.78,0.56,0.22);
+  function buf(arr){var b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(arr),gl.STATIC_DRAW);return b;}
+  var bA=buf(gA), bB=buf(gB);
+  var VS='attribute vec2 p;uniform float asp,ang,sc,offx,offy;void main(){float c=cos(ang),s=sin(ang);vec2 q=vec2(p.x*c-p.y*s,p.x*s+p.y*c);q*=sc;q.x+=offx;q.y+=offy;q.x/=asp;gl_Position=vec4(q,0.0,1.0);}';
+  var FS='precision mediump float;uniform float a;void main(){gl_FragColor=vec4(1.0,0.48,0.20,a);}';
+  function sh(ty,s){var o=gl.createShader(ty);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw gl.getShaderInfoLog(o);return o;}
+  var prog;try{prog=gl.createProgram();gl.attachShader(prog,sh(gl.VERTEX_SHADER,VS));gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,FS));gl.linkProgram(prog);if(!gl.getProgramParameter(prog,gl.LINK_STATUS))throw'link';}catch(e){fallback();return;}
+  var uAsp=gl.getUniformLocation(prog,'asp'),uAng=gl.getUniformLocation(prog,'ang'),uSc=gl.getUniformLocation(prog,'sc'),uOx=gl.getUniformLocation(prog,'offx'),uOy=gl.getUniformLocation(prog,'offy'),uA=gl.getUniformLocation(prog,'a');
+  var aLoc=gl.getAttribLocation(prog,'p');
+  gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+  function drawGear(b,n,ang,sc,ox,oy,al){gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.enableVertexAttribArray(aLoc);gl.vertexAttribPointer(aLoc,2,gl.FLOAT,false,0,0);
+    gl.uniform1f(uAsp,ASP);gl.uniform1f(uAng,ang);gl.uniform1f(uSc,sc);gl.uniform1f(uOx,ox);gl.uniform1f(uOy,oy);gl.uniform1f(uA,al);gl.lineWidth(1);gl.drawArrays(gl.LINES,0,n/2);}
+  var ASP=1,t0=null;
+  function frame(tm){requestAnimationFrame(frame);if(t0===null)t0=tm;var tt=(tm-t0)*0.001;
+    var w=cv.width=innerWidth,h=cv.height=innerHeight;gl.viewport(0,0,w,h);ASP=w/h;
+    gl.clearColor(0.965,0.949,0.925,1.0);gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.useProgram(prog);
+    drawGear(bA,gA.length, tt*0.32, 0.5,-0.46,-0.12, 0.16);
+    drawGear(bB,gB.length, -tt*0.45+0.3, 0.42, 0.42, 0.28, 0.13);
+    drawGear(bB,gB.length, tt*0.4-1.0, 0.3, 0.62,-0.5, 0.10);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+<script>
+(function(){
+  var cv=document.getElementById('stage'); var ctx=cv&&cv.getContext('2d'); if(!ctx)return;
+  var DPR=Math.min(window.devicePixelRatio||1,2);
+  function size(){var w=cv.clientWidth||900;cv.width=Math.round(w*DPR);cv.height=Math.round((w*440/900)*DPR);}
+  size(); addEventListener('resize',size);
+  var env={cv:cv,ctx:ctx,DPR:DPR,W:function(){return cv.width/DPR;},H:function(){return cv.height/DPR;},
+    set:function(id,val,cls){var e=document.getElementById(id);if(e){e.textContent=val;if(cls!=null)e.className='v '+cls;}},
+    evt:function(e){var r=cv.getBoundingClientRect();var sx=(cv.width/DPR)/r.width, sy=(cv.height/DPR)/r.height;
+      var cx=(e.touches?e.touches[0].clientX:e.clientX), cy=(e.touches?e.touches[0].clientY:e.clientY);
+      return {x:(cx-r.left)*sx, y:(cy-r.top)*sy};}};
+  var t0=null, inited=false;
+  function loop(t){requestAnimationFrame(loop);if(t0===null)t0=t;env.t=(t-t0)*0.001;
+    if(!inited&&window.__INST__){inited=true;if(window.__INST__.init)window.__INST__.init(env);}
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    if(window.__INST__&&window.__INST__.draw)window.__INST__.draw(env);}
+  requestAnimationFrame(loop);
+})();
+</script>
+<script>
+  function onDrag(env,pick,move){var handle=null;
+    function down(e){e.preventDefault();var p=env.evt(e);handle=pick(p);if(handle!=null)move(handle,p);}
+    function mv(e){if(handle==null)return;e.preventDefault();move(handle,env.evt(e));}
+    function up(){handle=null;}
+    env.cv.addEventListener('pointerdown',down);env.cv.addEventListener('pointermove',mv);
+    window.addEventListener('pointerup',up);env.cv.addEventListener('touchstart',down,{passive:false});env.cv.addEventListener('touchmove',mv,{passive:false});window.addEventListener('touchend',up);
+  }
+
+(function(){
+  var SH=[{s:6,l:8},{s:9,l:8},{s:14,l:8}], len=8, pat=0, ENV;
+  var PATS=[
+    function(h){return (h>=11&&h<14)||(h>=17&&h<20)?3:((h>=8&&h<21)?2:(h>=6&&h<24?1:0));}, // retail double-peak
+    function(h){return h>=8&&h<18?2:0;}, // 9-to-5 flat
+    function(h){return (h>=22||h<6)?2:1;} // night-heavy
+  ];
+  var PN=['retail (two peaks)','office (9–5)','overnight'];
+  function dem(h){return PATS[pat](h);}
+  function cov(h){var n=0;for(var i=0;i<SH.length;i++){var a=SH[i].s,b=SH[i].s+SH[i].l;if((h>=a&&h<b)||(b>24&&h<b-24))n++;}return n;}
+  function refresh(){if(!ENV)return;var under=0,waste=0,full=0,lab=0;
+    for(var h=0;h<24;h++){var d=dem(h),c=cov(h);if(c<d)under+=(d-c);if(c>d)waste+=(c-d);if(c>=d)full++;}
+    for(var i=0;i<SH.length;i++)lab+=SH[i].l;
+    ENV.set('roCrew',SH.length+' · '+lab+' hrs','c');
+    ENV.set('roCov',full+'/24 hrs',full>=22?'g':(full>=18?'a':'r'));
+    ENV.set('roUnder',under+' worker-hrs',under===0?'g':(under<6?'a':'r'));
+    ENV.set('roWaste',waste+' worker-hrs',waste<4?'g':(waste<10?'a':'r'));
+    ENV.set('roState',under===0?(waste<6?'well-matched':'covered but padded'):'gaps at the peaks',under===0?(waste<6?'g':'a'):'r');}
+  var x0=44,plotW=0;
+  window.__INST__={init:function(env){ENV=env;
+    document.getElementById('add').onclick=function(){SH.push({s:8,l:len});refresh();};
+    document.getElementById('fire').onclick=function(){if(SH.length>1)SH.pop();refresh();};
+    document.getElementById('pat').onclick=function(){pat=(pat+1)%3;refresh();};
+    document.getElementById('len').oninput=function(){len=+this.value;document.getElementById('lenv').textContent=len;for(var i=0;i<SH.length;i++)SH[i].l=len;refresh();};
+    onDrag(env,function(p){plotW=env.W()-x0-20;var row=Math.floor((p.y-150)/30);return (row>=0&&row<SH.length)?row:null;},
+      function(i,p){plotW=env.W()-x0-20;var hh=Math.round((p.x-x0)/plotW*24-SH[i].l/2);SH[i].s=Math.max(0,Math.min(24-SH[i].l,hh));refresh();});
+    refresh();},
+   draw:function(env){var c=env.ctx,w=env.W(),h=env.H();c.clearRect(0,0,w,h);plotW=w-x0-20;
+     function X(hr){return x0+hr/24*plotW;}
+     // demand curve (top)
+     var topY=40,dh=70;var maxd=3;
+     c.fillStyle='#6f675c';c.font='600 10px ui-monospace,monospace';c.textAlign='left';c.fillText('demand · '+PN[pat],x0,topY-8);
+     for(var hh=0;hh<24;hh++){var d=dem(hh),cc=cov(hh);var bx=X(hh),bw=plotW/24;
+       c.fillStyle='rgba(58,96,121,.18)';c.fillRect(bx+1,topY+dh-d/maxd*dh,bw-2,d/maxd*dh);
+       // coverage overlay
+       c.fillStyle=cc>=d?'rgba(46,139,87,.5)':'rgba(216,95,38,.55)';c.fillRect(bx+1,topY+dh-cc/maxd*dh,bw-2,3);}
+     c.strokeStyle='rgba(111,103,92,.3)';c.lineWidth=1;c.strokeRect(x0,topY,plotW,dh);
+     // hour ticks
+     c.fillStyle='#8a8175';c.font='600 9px ui-monospace,monospace';c.textAlign='center';
+     for(var t=0;t<=24;t+=6){c.fillText((t<10?'0':'')+t+':00',X(t),topY+dh+14);}
+     // shift blocks (draggable rows)
+     for(var i=0;i<SH.length;i++){var ry=150+i*30;var a=X(SH[i].s),b=X(SH[i].s+SH[i].l);
+       c.fillStyle='rgba(255,122,60,.7)';c.strokeStyle='#b34d14';c.lineWidth=1.5;
+       c.fillRect(a,ry,b-a,22);c.strokeRect(a,ry,b-a,22);
+       c.fillStyle='#fff';c.font='700 10px ui-monospace,monospace';c.textAlign='center';c.fillText('worker '+(i+1)+'  '+SH[i].s+':00–'+((SH[i].s+SH[i].l)%24)+':00',(a+b)/2,ry+15);}
+     c.fillStyle='#6f675c';c.font='600 10px ui-monospace,monospace';c.textAlign='left';c.fillText('drag a shift ⇆ along the clock · green ticks = covered, orange = short',x0,h-12);
+   }};
+})();
+</script>
+</body></html>
