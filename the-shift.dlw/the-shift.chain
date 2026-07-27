@@ -1,9 +1,9 @@
 ROOT0-DLW-CHAIN-v1
 index : 1540
 slug  : the-shift
-seal  : 28a22b8c0d930c877af42dd934e273a2586b829a97adf12fe91cab890df85e8a
-prev  : ffab27542e02f23fe075dffc61e703f37cb306918f4c5c72e9b8f1bbcce70460
-link  : b5a3b1eb972a4e885363d014f8c2599ac2bc37e88a066985d537ef1f2c93e443
-head  : ef1e6cffb86c401986e408043ee13d82db03495dc2bb5973a74fc431a76fb416
+seal  : c610cceff716f1d8548cde70ba9a2f4942a32ae499099f8b82c96af86f5e7d2d
+prev  : 225744d469af48ade29ec0cad9ba64888a4feaf21fdfe238acac8e6323e51b4d
+link  : f132b7e772c5d0ebbe039cd9e8cce7f276c87b2fcdbb1daca973abe02fecc281
+head  : c4d41afeaef76470528856d54d86cf480a0e1c2fc8ebc60fbb9eb8e442585f2b
 
 — the tether: link = sha256(index|slug|seal|prev). the chain head commits to the whole corpus.
